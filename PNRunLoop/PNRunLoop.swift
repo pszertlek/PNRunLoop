@@ -22,15 +22,15 @@ enum PNRunLoopResult {
     case finished,stopped,timedOut,handleSource
 }
 
-struct PNOptionFlags: OptionSet {
+struct PNRunLoopActivity: OptionSet {
     let rawValue: Int
-    static let entry = PNOptionFlags(rawValue: 1 << 0)
-    static let beforeTimers = PNOptionFlags(rawValue: 1 << 1)
-    static let beforeSources = PNOptionFlags(rawValue: 1 << 2)
-    static let beforeWaiting = PNOptionFlags(rawValue: 1 << 5)
-    static let afterWaiting = PNOptionFlags(rawValue: 1 << 6)
-    static let exit = PNOptionFlags(rawValue: 1 << 7)
-    static let allActivities = PNOptionFlags(rawValue: 0x0fffffff)
+    static let entry = PNRunLoopActivity(rawValue: 1 << 0)
+    static let beforeTimers = PNRunLoopActivity(rawValue: 1 << 1)
+    static let beforeSources = PNRunLoopActivity(rawValue: 1 << 2)
+    static let beforeWaiting = PNRunLoopActivity(rawValue: 1 << 5)
+    static let afterWaiting = PNRunLoopActivity(rawValue: 1 << 6)
+    static let exit = PNRunLoopActivity(rawValue: 1 << 7)
+    static let allActivities = PNRunLoopActivity(rawValue: 0x0fffffff)
 }
 
 let kRunLoopDefaultMode = "kRunLoopDefaultMode"
@@ -55,7 +55,7 @@ class _per_run_data {
 }
 
 class PNRunLoop {
-    var lock: pthread_mutex_t
+    var lock: pthread_mutex_t!
     var wakeUpPort: PNPort!
     var unused: Bool = false
     var perRunData: _per_run_data = _per_run_data()
@@ -96,13 +96,9 @@ class PNRunLoop {
         }
     }
     
-//    var isSleeping: Bool {
-//        set {
-//            if newValue {
-//                perRunData.ignoreWakeUps =
-//            }
-//        }
-//    }
+    var isSleeping: Bool = false
+    
+    var isDeallocating: Bool = false
     
     
     init() {
@@ -140,7 +136,85 @@ class PNRunLoop {
         }
     }
     
-    static func runLoopFindMode(modeName: String, create: Bool) -> PNRunLoop {
-        let runLoopMode = PNRunLoopMode()
+//    static func runLoopFindMode(modeName: String, create: Bool) -> PNRunLoop {
+//        let runLoopMode = PNRunLoopMode()
+//    }
+    
+}
+
+let kPNRunLoopCommonModes = "kPNRunLoopCommonModes"
+let kPNRunLoopDefaultMode = "kPNRunLoopDefaultMode"
+let kPNRunLoopTrackingMode = "kPNRunLoopTrackingMode"
+
+extension PNRunLoop {
+    func observerSchedule(rlo: PNRunLoopObserver, mode: PNRunLoopModeRef) {
+        rlo.oberverLock()
+        if 0 == rlo.rlCount {
+            rlo.runLoop = self
+        }
+        rlo.rlCount += 1
+        rlo.observerUnlock()
+    }
+    
+    func observerCancel(rlo: PNRunLoopObserver, mode: PNRunLoopModeRef) {
+        rlo.oberverLock()
+        rlo.rlCount -= 1
+        if 0 == rlo.rlCount {
+            rlo.runLoop = nil
+        }
+        rlo.observerUnlock()
+    }
+    
+}
+
+extension PNRunLoop {
+    //__CFRunLoopFindMode 创建
+    func findMode(modeName: String, create: Bool) -> PNRunLoopModeRef? {
+        var runloopMode: PNRunLoopModeRef?
+        var srlm = PNRunLoopModeRef(name: modeName) {
+            
+        }
+        if self.modes.contains(modeName) {
+            runloopMode = srlm
+        }
+        srlm.name = modeName
+        if runloopMode != nil {
+            runloopMode?.modeLock()
+            return runloopMode
+        }
+        if !create {
+            return nil
+        }
+        
+        
+    }
+}
+
+extension PNRunLoop {
+    func runSpecific(runLoop: PNRunLoop, modeName: String, seconds: CFTimeInterval, returnAfterSouceHandled: Bool) -> PNRunLoopResult {
+        if modeName == nil || modeName == kPNRunLoopCommonModes || modeName == kPNRunLoopCommonModes {
+            return .finished
+        }
+        if runLoop.isDeallocating {
+            return .finished
+        }
+        runLoop.runLoopLock()
+        let currentMode = self.findMode(modeName: modeName, create: false)
+        if currentMode == nil // || __CFRunLoopModeIsEmpty(rl, currentMode, rl->_currentMode)
+        {
+            var did = false
+            if currentMode != nil {
+                currentMode?.modeUnlock()
+                return did ? .handleSource : .finished
+            }
+
+        }
+    }
+}
+
+extension PNRunLoop {
+    //MARK: public API
+    func getTypeId() -> Int {
+        return 0
     }
 }

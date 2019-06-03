@@ -12,6 +12,9 @@
 		18D860522071F161001AC799 /* PNRunLoop.h in Headers */ = {isa = PBXBuildFile; fileRef = 18D860442071F161001AC799 /* PNRunLoop.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		18D8605C2071F183001AC799 /* PNRunLoop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D8605B2071F183001AC799 /* PNRunLoop.swift */; };
 		18D8605E2071F748001AC799 /* PNRunLoopMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D8605D2071F748001AC799 /* PNRunLoopMode.swift */; };
+		18EB956B229FA9D10052A735 /* PNRunLoopSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18EB956A229FA9D10052A735 /* PNRunLoopSource.swift */; };
+		18EB956D229FB0AC0052A735 /* PNRunLoopObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18EB956C229FB0AC0052A735 /* PNRunLoopObserver.swift */; };
+		18EB956F229FBB560052A735 /* PNRunLoopTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18EB956E229FBB560052A735 /* PNRunLoopTimer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +36,9 @@
 		18D860512071F161001AC799 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		18D8605B2071F183001AC799 /* PNRunLoop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PNRunLoop.swift; sourceTree = "<group>"; };
 		18D8605D2071F748001AC799 /* PNRunLoopMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PNRunLoopMode.swift; sourceTree = "<group>"; };
+		18EB956A229FA9D10052A735 /* PNRunLoopSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PNRunLoopSource.swift; sourceTree = "<group>"; };
+		18EB956C229FB0AC0052A735 /* PNRunLoopObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PNRunLoopObserver.swift; sourceTree = "<group>"; };
+		18EB956E229FBB560052A735 /* PNRunLoopTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PNRunLoopTimer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +84,9 @@
 				18D860442071F161001AC799 /* PNRunLoop.h */,
 				18D8605B2071F183001AC799 /* PNRunLoop.swift */,
 				18D8605D2071F748001AC799 /* PNRunLoopMode.swift */,
+				18EB956A229FA9D10052A735 /* PNRunLoopSource.swift */,
+				18EB956C229FB0AC0052A735 /* PNRunLoopObserver.swift */,
+				18EB956E229FBB560052A735 /* PNRunLoopTimer.swift */,
 				18D860452071F161001AC799 /* Info.plist */,
 			);
 			path = PNRunLoop;
@@ -203,8 +212,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18EB956B229FA9D10052A735 /* PNRunLoopSource.swift in Sources */,
+				18EB956F229FBB560052A735 /* PNRunLoopTimer.swift in Sources */,
 				18D8605E2071F748001AC799 /* PNRunLoopMode.swift in Sources */,
 				18D8605C2071F183001AC799 /* PNRunLoop.swift in Sources */,
+				18EB956D229FB0AC0052A735 /* PNRunLoopObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -358,7 +370,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -380,7 +392,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Pszertlek.PNRunLoop;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
